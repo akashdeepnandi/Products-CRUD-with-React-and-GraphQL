@@ -1,26 +1,18 @@
+import { useQuery } from "@apollo/client";
 import React from "react";
 import { Link } from "react-router-dom";
+import { GET_PRODUCTS } from "../queries/productQueries";
 import ProductItem from "./ProductItem";
+import Loader from "./Loader";
+
 
 const ProductList = () => {
-  const products = [
-    {
-      name: "Product 1",
-      id: 1,
-    },
-    {
-      name: "Product 2",
-      id: 2,
-    },
-    {
-      name: "Product 3",
-      id: 3,
-    },
-    {
-      name: "Product 4",
-      id: 4,
-    },
-  ];
+  const { loading, error, data } = useQuery(GET_PRODUCTS);
+
+  if (loading) return <p><Loader /></p>;
+  if (error) return <p>Error :(</p>;
+  console.table(data);
+	const { products } = data;
   return (
     <div className="container">
       <h4 className="blue-text center">Product list</h4>
@@ -31,8 +23,11 @@ const ProductList = () => {
               <ProductItem key={id} name={name} id={id} />
             ))}
           </div>
-          <Link to="/add-product" className="btn-floating btn-large waves-effect waves-light red right">
-            <i className="material-icons">add</i> 
+          <Link
+            to="/add-product"
+            className="btn-floating btn-large waves-effect waves-light red right"
+          >
+            <i className="material-icons">add</i>
           </Link>
         </div>
       </div>
