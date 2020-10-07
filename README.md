@@ -47,11 +47,6 @@ You can start using this application just by running to four simple steps, after
 ### Screenshots:
 <img align="center" alt="Node.js"  src="./img/home.png" />
 <p align="center">Home Page</p>
-<img align="center" alt="Node.js"  src="./img/product-list.png" />
-<p align="center">Product List Page</p>
-<img align="center" alt="Node.js"  src="./img/product-details.png" />
-<p align="center">Product Details Page</p>
-<img align="center" alt="Node.js"  src="./img/add-product.png" />
 <p align="center">Add Product Page</p>
 
 ----
