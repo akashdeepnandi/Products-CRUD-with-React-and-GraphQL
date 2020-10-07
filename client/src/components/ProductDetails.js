@@ -69,7 +69,11 @@ const ProductDetails = ({
 		)
 	}
   const { product } = data;
-
+	if (!product) return (
+		<div className="container center">
+			<h4 className="blue-text">Product has not been found</h4>
+		</div>
+	)
   return (
     <div className="container">
       <div className="row">
