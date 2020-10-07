@@ -19,3 +19,12 @@ export const GET_PRODUCT_BY_ID = gql`
 		}
 	}
 `;
+
+export const CREATE_PRODUCT = gql`
+	mutation createProduct($name: String!, $price: Float! ,$material: String!) {
+		createProduct(name: $name, price: $price, material: $material) {
+			id
+			name
+		}
+	}
+`
