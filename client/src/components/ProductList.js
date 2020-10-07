@@ -9,7 +9,7 @@ import Loader from "./Loader";
 const ProductList = () => {
   const { loading, error, data } = useQuery(GET_PRODUCTS);
 
-  if (loading) return <p><Loader /></p>;
+  if (loading) return <><Loader /></>;
   if (error) return <p>Error :(</p>;
   console.table(data);
 	const { products } = data;

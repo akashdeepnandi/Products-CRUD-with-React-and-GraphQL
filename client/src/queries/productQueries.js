@@ -8,3 +8,14 @@ export const GET_PRODUCTS = gql`
 		}
 	}
 `;
+
+export const GET_PRODUCT_BY_ID = gql`
+	query getProductById($id: String!){
+		product(id: $id){
+			id
+			name
+			material
+			price
+		}
+	}
+`;
