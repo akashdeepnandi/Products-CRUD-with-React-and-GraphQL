@@ -1,7 +1,7 @@
-import { useMutation } from "@apollo/client";
-import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { CREATE_PRODUCT } from "../queries/productQueries";
+import { EDIT_PRODUCT, GET_PRODUCT_BY_ID } from "../queries/productQueries";
 import Loader from "./Loader";
 
 const EditProductForm = ({
@@ -9,15 +9,35 @@ const EditProductForm = ({
     params: { id },
   },
 }) => {
+  const { loading, error, data } = useQuery(GET_PRODUCT_BY_ID, {
+    variables: { id },
+  });
   const [name, setName] = useState("");
   const [material, setMaterial] = useState("");
   const [price, setPrice] = useState("");
-  const [createProduct, { data: createData , loading: createLoading, error: createError }] = useMutation(CREATE_PRODUCT);
-  
+  const [
+    editProduct,
+    { data: editData, loading: editLoading, error: editError },
+  ] = useMutation(EDIT_PRODUCT);
+  useEffect(() => {
+    if (data) {
+      setName(data.product.name);
+      setMaterial(data.product.material);
+      setPrice(data.product.price);
+    }
+  }, [data]);
+  if (loading)
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  if (error) return <p>Error :(</p>;
   const handleSubmit = (e) => {
     e.preventDefault();
-    createProduct({
+    editProduct({
       variables: {
+        id,
         name,
         material,
         price: Number(price),
@@ -27,9 +47,17 @@ const EditProductForm = ({
     setMaterial("");
     setPrice("");
   };
-  if (createLoading) return <Loader />;
-	if (createError) return <p>Error :(</p>;
-	if (createData) return <div className="container"><h4 className="blue-text center">Product Successfully Added</h4></div> 
+  if (editLoading) return <Loader />;
+  if (editError) {
+    console.log(editError);
+    return <p>Error :(</p>;
+  }
+  if (editData)
+    return (
+      <div className="container">
+        <h4 className="blue-text center">Product Successfully Edited</h4>
+      </div>
+    );
   return (
     <div className="container">
       <div className="row" style={{ marginTop: "2rem" }}>
@@ -41,7 +69,9 @@ const EditProductForm = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <label htmlFor="">Product Name</label>
+            <label className={name ? "active" : "no"} htmlFor="">
+              Product Name
+            </label>
           </div>
 
           <div className="input-field">
@@ -51,16 +81,21 @@ const EditProductForm = ({
               value={material}
               onChange={(e) => setMaterial(e.target.value)}
             />
-            <label htmlFor="">Product Material</label>
+            <label className={name ? "active" : "no"} htmlFor="">
+              Product Material
+            </label>
           </div>
           <div className="input-field">
             <input
               type="number"
               required
+              className="active"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
-            <label htmlFor="">Product Price</label>
+            <label className={name ? "active" : "no"} htmlFor="">
+              Product Price
+            </label>
           </div>
           <button className="btn waves-effect waves-light">
             Submit
