@@ -15,6 +15,7 @@ const ProductList = () => {
   return (
     <div className="container">
       <h4 className="blue-text center">Product list</h4>
+			<h6 className="blue-text text-darken-4 center">To add product, go to the bottom</h6>
       <div className="row">
         <div className="col s12 m6 offset-m3">
           <div className="collection" style={{ margin: "2rem" }}>
