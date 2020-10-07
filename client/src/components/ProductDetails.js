@@ -1,7 +1,8 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { GET_PRODUCT_BY_ID } from "../queries/productQueries";
+import { GET_PRODUCT_BY_ID, REMOVE_PRODUCT } from "../queries/productQueries";
 import Loader from "./Loader";
 
 const ProductDetails = ({
@@ -11,7 +12,12 @@ const ProductDetails = ({
 }) => {
   const { loading, error, data } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id },
-  });
+	});
+	const [
+    removeProduct,
+    { data: removeData, loading: removeLoading, error: removeError },
+  ] = useMutation(REMOVE_PRODUCT);
+  const [IsDeleting, setDelete] = useState(false);
 
   if (loading)
     return (
@@ -19,8 +25,51 @@ const ProductDetails = ({
         <Loader />
       </>
     );
-  if (error) return <p>Error :(</p>;
-	const { product } = data;
+	if (error) return <p>Error :(</p>;
+	
+  if (IsDeleting)
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m3 offset-m6 center">
+            <h4 className="red-text">Are you sure?</h4>
+            <button
+              className="btn"
+              onClick={(e) => {
+                e.preventDefault();
+                removeProduct({
+									variables: {
+										id
+									}
+								});
+								setDelete(false)
+              }}
+            >
+              Yes
+            </button>
+            <button className="btn" onClick={(e) => setDelete(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+		);
+	if (removeLoading)
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  if (removeError) return <p>Error :(</p>;
+	if (removeData) {
+		return (
+			<div className="container center">
+				<h4 className="blue-text">Product has been deleted</h4>
+			</div>
+		)
+	}
+  const { product } = data;
+
   return (
     <div className="container">
       <div className="row">
@@ -32,7 +81,9 @@ const ProductDetails = ({
                 Made with {product.material}
               </h6>
 
-              <h6 className="blue-text text-lighten-1">Price: Rs.{product.price}</h6>
+              <h6 className="blue-text text-lighten-1">
+                Price: Rs.{product.price}
+              </h6>
             </div>
             <div className="card-action">
               <Link
@@ -43,6 +94,12 @@ const ProductDetails = ({
                 {"  "}
                 <i className="tiny material-icons">edit</i>
               </Link>
+              <button
+                className="waves-effect waves-light btn red"
+                onClick={(e) => setDelete(true)}
+              >
+                <i className="material-icons right">delete</i>Delete
+              </button>
             </div>
           </div>
         </div>

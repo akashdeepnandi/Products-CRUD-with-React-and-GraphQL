@@ -11,7 +11,6 @@ const ProductList = () => {
 
   if (loading) return <><Loader /></>;
   if (error) return <p>Error :(</p>;
-  console.table(data);
 	const { products } = data;
   return (
     <div className="container">

@@ -42,3 +42,11 @@ export const EDIT_PRODUCT = gql`
     }
   }
 `;
+
+export const REMOVE_PRODUCT = gql`
+	mutation removeProduct($id: String!) {
+		removeProduct(id: $id) {
+			name
+		}
+	}
+`
